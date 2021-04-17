@@ -1,36 +1,29 @@
 from flask import Flask
+import random
+
 app = Flask(__name__)
 
-# print(app)
+answer_number = random.randint(0, 9)
+print(answer_number)
+@app.route('/home')
+def guess_number():
 
-def make_center(function):
-    def center():
-        return f"<h1 style='text-align: center'> {function()} </h1>"
+    return '<h1>Guess a number between 0 and 9</h1>' \
+           '<img src="https://media.giphy.com/media/3o7aCSPqXE5C6T8tBC/giphy.gif">'
 
-    return center
-@app.route('/')
-@make_center
-def hello_world():
-    return 'Hello, World!' \
-           '<p> This is paragraph </p>' \
-           '<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8qY-fjzbU3eY60grVgnkK7ZuHp8PQNmy9lg&usqp=CAU">'
+@app.route('/<int:number>')
+def wrong_number(number):
+    if number > answer_number:
+        return "<h1 style='color: purple'>Too high, try again!</h1>" \
+               "<img src='https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif'/>"
 
+    elif number < answer_number:
+        return "<h1 style='color: red'>Too low, try again!</h1>" \
+               "<img src='https://media.giphy.com/media/jD4DwBtqPXRXa/giphy.gif'/>"
+    else:
+        return "<h1 style='color: green'>You found me!</h1>" \
+               "<img src='https://media.giphy.com/media/4T7e4DmcrP9du/giphy.gif'/>"
 
-@app.route('/3')
-def three():
-    return 'This is three'
-
-@app.route('/users/<name>')
-def greet(name):
-    return f"Hello {name}"
-
-@app.route('/sam')
-def sam():
-    return f"Serverless architecture management"
-
-@app.route('/username/<name>/<int:id>')
-def greet_user(name, id):
-    return f"Hello {name} {id}"
 
 if __name__ == "__main__":
     #run in debug mode to auto reload
